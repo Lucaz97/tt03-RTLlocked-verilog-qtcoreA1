@@ -87,7 +87,7 @@ module memory_bank #(
         .clk(clk),
         .rst(rst),
         .enable(1'b0), // This is only accessible via scan chain
-        .data_in(8'b0), //doesn't matter what this is
+        .data_in(16'b0), //doesn't matter what this is
         .data_out(locking_key),
         .scan_enable(scan_enable),
         .scan_in(led_scan_out), // Connect the scan_in to the last memory cell scan_out

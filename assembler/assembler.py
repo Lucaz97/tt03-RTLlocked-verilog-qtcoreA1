@@ -1,4 +1,4 @@
-MEM_SIZE = 18
+MEM_SIZE = 17 #includes IOREG and LOCKING REGs
 
 def assemble(asm_lines):
     opcode_dict = {

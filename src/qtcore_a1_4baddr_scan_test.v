@@ -15,7 +15,7 @@ module qtcore_a1_4baddr_scan_test (
  localparam CLK_PERIOD = 50;
     localparam CLK_HPERIOD = CLK_PERIOD/2;
 
-    localparam FULL_MEM_SIZE = 16; //includes the IO register
+    localparam FULL_MEM_SIZE = 15; //includes the IO register
     localparam SCAN_CHAIN_SIZE = 24 + (FULL_MEM_SIZE * 8) + 16;
     wire [7:0] io_in;
     wire [7:0] io_out;
@@ -238,29 +238,31 @@ module qtcore_a1_4baddr_scan_test (
 
         $display("TEST 2");
 
-        scan_chain = 'b0;
         scan_chain[2:0] = 3'b001;  //state = fetch
         scan_chain[7:3] = 5'h0;    //PC = 0
         scan_chain[15:8] = 8'h00; //IR = 0
         scan_chain[23:16] = 8'h00; //ACC = 0x00
-        scan_chain[31 -: 8] = 8'b00001111;
+        scan_chain[31 -: 8] = 8'b00001101;
         scan_chain[39 -: 8] = 8'b11110010;
         scan_chain[47 -: 8] = 8'b11111100;
-        scan_chain[55 -: 8] = 8'b00101111;
+        scan_chain[55 -: 8] = 8'b00101101;
         scan_chain[63 -: 8] = 8'b11110101;
         scan_chain[71 -: 8] = 8'b11101111;
         scan_chain[79 -: 8] = 8'b11111000;
         scan_chain[87 -: 8] = 8'b11101111;
         scan_chain[95 -: 8] = 8'b11100001;
-        scan_chain[103 -: 8] = 8'b00101110;
+        scan_chain[103 -: 8] = 8'b00101100;
         scan_chain[111 -: 8] = 8'b11110011;
         scan_chain[119 -: 8] = 8'b11111111;
         scan_chain[127 -: 8] = 8'b00000000;
-        scan_chain[135 -: 8] = 8'b00000000;
+        scan_chain[135 -: 8] = 8'b00010000;
         scan_chain[143 -: 8] = 8'b00000000;
-        scan_chain[151 -: 8] = 8'b00010000;
-        scan_chain[159 -: 8] = 8'b11111001;
-        scan_chain[167 -: 8] = 8'b10111111;
+        scan_chain[151 -: 8] = 8'b11111001;
+        scan_chain[159 -: 8] = 8'b10111111;
+
+
+        //scan_chain[SCAN_CHAIN_SIZE -1 -:16] = 16'b1011111111111001;
+
         //scan_chain[159 -: 8] = 8'b11111001; // KEY: 249
         //scan_chain[167 -: 8] = 8'b10111111; // KEY: 191
 
@@ -281,12 +283,12 @@ module qtcore_a1_4baddr_scan_test (
         //SCAN OUT
         xchg_scan_chain;
 
-        if(scan_chain[31+8*15 -: 8] !== 8'h0) begin
-            $display("MEM[15] wrong value");
+        if(scan_chain[31+8*13 -: 8] !== 8'h0) begin
+            $display("MEM[13] wrong value");
             $finish;
         end
-        if(scan_chain[31+8*14 -: 8] !== 8'h1) begin
-            $display("MEM[14] wrong value %d", scan_chain[24+16*8 -: 8]);
+        if(scan_chain[31+8*12 -: 8] !== 8'h1) begin
+            $display("MEM[12] wrong value %d", scan_chain[24+12*8 -: 8]);
             $finish;
         end
         $display("Memory values correct after scanout");
