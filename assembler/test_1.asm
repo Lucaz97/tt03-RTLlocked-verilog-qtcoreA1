@@ -1,13 +1,13 @@
-; this program will load the value at address 15, decrement it in a loop till its zero, then 
+; this program will load the value at address 13, decrement it in a loop till its zero, then 
 ; starting from 0b11111111, overflow it, then increment once more to get to 1
 ; tests: M[13] = 0
 ;        M[12] = 1
 ; THIS IS FOR THE LOCKED VERSION OF QTCORE-A1, WHICH NEEDS TO BE UNLOCKED
-; UNLOCKING IS DONE WITH THE DATA COMMANDS AT ADDRESS 16 AND 17
-0: LDA 13       ; load value from address 10 to accumulator
+; UNLOCKING IS DONE WITH THE DATA COMMANDS AT ADDRESS 15 AND 16
+0: LDA 13       ; load value from address 13 to accumulator
 1: BEQ_FWD      ; if accumulator is zero, skip to 4
 2: DEC          ; decrement the accumulator
-3: STA 13       ; store accumulator value at address 10
+3: STA 13       ; store accumulator value at address 13
 4: BNE_BWD      ; if accumulator is not zero, jump back to 2
 5: ADDI 15      ; the accumulator is set to 15
 6: SHL4
