@@ -2,6 +2,8 @@
 ; starting from 0b11111111, overflow it, then increment once more to get to 1
 ; tests: M[15] = 0
 ;        M[14] = 1
+; THIS IS FOR THE LOCKED VERSION OF QTCORE-A1, WHICH NEEDS TO BE UNLOCKED
+; UNLOCKING IS DONE WITH THE DATA COMMANDS AT ADDRESS 16 AND 17
 0: LDA 15       ; load value from address 10 to accumulator
 1: BEQ_FWD      ; if accumulator is zero, skip to 4
 2: DEC          ; decrement the accumulator
@@ -16,3 +18,5 @@
 11: HLT
 
 15: DATA 16     ; store the initial value (16) at address 10
+16: DATA 249    ; logic locking unlock key (program will not work without this)
+17: DATA 191    ; logic locking unlock key (program will not work without this)

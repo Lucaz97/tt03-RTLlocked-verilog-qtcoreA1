@@ -1,7 +1,8 @@
 ; this program tests subroutines and jumping
 ; check correct operation by ensuring it halts and that at conclusion:
 ; MEM[4] should be 0
-; MEM[16] should be 3
+; THIS IS FOR THE LOCKED VERSION OF QTCORE-A1, WHICH NEEDS TO BE UNLOCKED
+; UNLOCKING IS DONE WITH THE DATA COMMANDS AT ADDRESS 16 AND 17
 0: CLR
 1: ADDI 5      ; set accumulator to 5
 2: JSR          ; jump to address 5
@@ -19,3 +20,6 @@
 12: CLR          ; reset the accumulator
 13: ADDI 5      ; set it to 5
 14: JMP          ; jump to 5
+;
+16: DATA 249    ; logic locking unlock key (program will not work without this)
+17: DATA 191    ; logic locking unlock key (program will not work without this)

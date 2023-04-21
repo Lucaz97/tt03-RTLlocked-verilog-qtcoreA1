@@ -240,7 +240,6 @@ module qtcore_a1_4baddr_scan_test (
 
         scan_chain = 'b0;
         scan_chain[2:0] = 3'b001;  //state = fetch
-        scan_chain[2:0] = 3'b001;  //state = fetch
         scan_chain[7:3] = 5'h0;    //PC = 0
         scan_chain[15:8] = 8'h00; //IR = 0
         scan_chain[23:16] = 8'h00; //ACC = 0x00
@@ -260,8 +259,10 @@ module qtcore_a1_4baddr_scan_test (
         scan_chain[135 -: 8] = 8'b00000000;
         scan_chain[143 -: 8] = 8'b00000000;
         scan_chain[151 -: 8] = 8'b00010000;
-        scan_chain[159 -: 8] = 8'b00000000;
-        scan_chain[SCAN_CHAIN_SIZE -1 -:16] = 16'b1011111111111001;
+        scan_chain[159 -: 8] = 8'b11111001;
+        scan_chain[167 -: 8] = 8'b10111111;
+        //scan_chain[159 -: 8] = 8'b11111001; // KEY: 249
+        //scan_chain[167 -: 8] = 8'b10111111; // KEY: 191
 
         //RESET PROCESSOR
         scan_enable_in = 0;
