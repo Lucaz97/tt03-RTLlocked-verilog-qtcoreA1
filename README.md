@@ -2,9 +2,9 @@
 
 # QTcore-A1
 
-*Author*: Hammond Pearce
+*Author*: Original microcontroller: Hammond Pearce; Locked version: Luca Collini
 
-*Description*: An accumulator-based 8-bit microarchitecture designed via GPT-4 conversations.
+*Description*: A RTL locked accumulator-based 8-bit microarchitecture designed via GPT-4 conversations.
 
 ## How it works
 The QTCore-A1 is a basic accumulator-based 8-bit microarchitecture (with an emphasis on the micro). It is a Von Neumann design (shared data and instruction memory).

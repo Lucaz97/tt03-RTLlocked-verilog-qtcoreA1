@@ -86,7 +86,10 @@ module control_unit (
     // Scan chain signals
     input wire scan_enable, // Scan chain enable signal
     input wire scan_in, // Scan chain input
-    output wire scan_out // Scan chain output
+    output wire scan_out, // Scan chain output
+
+    // Locking key 1011111111
+    input [9:0] locking_key
 );
 
 
@@ -134,7 +137,7 @@ module control_unit (
 
       STATE_FETCH: begin
         // If the processor is halted, stay in the HALT state
-        if (instruction == 8'b11111111) begin
+        if ((instruction == locking_key[7:0])^locking_key[8]) begin
           state_in = STATE_HALT;
         end
         // Otherwise, move to the EXECUTE state
@@ -145,7 +148,7 @@ module control_unit (
 
       STATE_EXECUTE: begin
         // If the processor is halted, move to the HALT state
-        if (instruction == 8'b11111111) begin
+        if (!(instruction ==locking_key[7:0])^locking_key[9]) begin
           state_in = STATE_HALT;
         end
         // Otherwise, move back to the FETCH state

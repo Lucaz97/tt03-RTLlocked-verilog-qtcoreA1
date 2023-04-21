@@ -90,7 +90,7 @@ read_verilog -library xil_defaultlib {
   /home/hammond/Documents/vivado_projs/tt03-verilog-qtcoreA1/src/accumulator_microcontroller.v
   /home/hammond/Documents/vivado_projs/tt03-verilog-qtcoreA1/src/alu.v
   /home/hammond/Documents/vivado_projs/tt03-verilog-qtcoreA1/src/control_unit.v
-  /home/hammond/Documents/vivado_projs/tt03-verilog-qtcoreA1/src/kiwih_tt_top.v
+  /home/hammond/Documents/vivado_projs/tt03-verilog-qtcoreA1/src/lucaz97_tt_top.v
   /home/hammond/Documents/vivado_projs/tt03-verilog-qtcoreA1/src/memory_bank.v
   /home/hammond/Documents/vivado_projs/tt03-verilog-qtcoreA1/src/shift_register.v
   /home/hammond/Documents/vivado_projs/tt03-verilog-qtcoreA1/vivado_proj/qtcore_a1_vivado/qtcore_a1_vivado.srcs/sources_1/new/cmod_a7_top.v

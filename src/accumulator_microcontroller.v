@@ -51,12 +51,16 @@ module accumulator_microcontroller #(
     wire ir_scan_out;
     wire memory_scan_out;
     wire zero_flag;
+    
+    //locking key
+    wire [15:0] locking_key; // correct key: 1011111111111001
 
     // Instantiate ALU
     alu ALU_inst (
         .A(alu_A),
         .B(alu_B),
         .opcode(cu_ALU_opcode),
+        .locking_key(locking_key[5:0]),
         .Y(alu_Y)
     );
 
@@ -157,7 +161,8 @@ module accumulator_microcontroller #(
 
         // Connect btn_in and led_out
         .btn_in(btn_in),
-        .led_out(led_out)
+        .led_out(led_out),
+        .locking_key(locking_key)
     );
 
     
@@ -196,7 +201,8 @@ module accumulator_microcontroller #(
     
         .scan_enable(scan_enable),
         .scan_in(scan_in),
-        .scan_out(control_unit_scan_out)
+        .scan_out(control_unit_scan_out),
+        .locking_key(locking_key[15:6])
     );
     
     

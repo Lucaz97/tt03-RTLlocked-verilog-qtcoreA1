@@ -53,7 +53,7 @@ assign led0_g = led_out[2];
 assign led[0] = led_out[3];
 assign led[1] = led_out[4];
 
-kiwih_tt_top kiwih_tt_top (
+lucaz97_tt_top lucaz97_tt_top (
     .io_in(io_in),
     .io_out(io_out)    
 );

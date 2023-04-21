@@ -7,7 +7,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 `default_nettype none
-module kiwih_tt_top(
+module lucaz97_tt_top(
     input wire [7:0] io_in,
     output wire [7:0] io_out
     );
@@ -31,7 +31,7 @@ assign io_out[7] = miso;
 assign io_out[6:0] = led_out;
 
 accumulator_microcontroller #(
-    .MEM_SIZE(17)
+    .MEM_SIZE(15)
 ) 
 qtcore
 (

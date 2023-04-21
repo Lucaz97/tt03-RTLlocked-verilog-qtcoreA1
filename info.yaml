@@ -11,9 +11,9 @@ project:
     - control_unit.v
     - memory_bank.v
     - shift_register.v
-    - kiwih_tt_top.v
+    - lucaz97_tt_top.v
   
-  top_module:  "kiwih_tt_top"      # put the name of your top module here, make it unique by prepending your github username
+  top_module:  "lucaz97_tt_top"      # put the name of your top module here, make it unique by prepending your github username
 
 # Keep a track of the submission yaml
 yaml_version: 3.0

@@ -1,4 +1,4 @@
-module kiwih_tt_top (vccd1,
+module lucaz97_tt_top (vccd1,
     vssd1,
     io_in,
     io_out);

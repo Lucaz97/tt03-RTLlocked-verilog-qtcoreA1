@@ -22,7 +22,8 @@ module memory_bank #(
     input wire scan_in,
     output wire scan_out,
     input wire btn_in, // Button input
-    output wire [6:0] led_out // 7-bit LED output
+    output wire [6:0] led_out, // 7-bit LED output
+    output wire [15:0] locking_key
 );
 
     // Generate an array of shift registers for the memory
@@ -65,6 +66,7 @@ module memory_bank #(
         .scan_out(io_scan_out) // Connect the new wire to the scan_out
     );
 
+    wire led_scan_out;
     shift_register #(
         .WIDTH(7)
     ) led_shift_register (
@@ -75,7 +77,21 @@ module memory_bank #(
         .data_out(led_data_out),
         .scan_enable(scan_enable),
         .scan_in(io_scan_out), // Connect the new wire to the scan_in
-        .scan_out(scan_out) // Connect the scan_out to the top-level module
+        .scan_out(led_scan_out) // Connect the scan_out to the top-level module
+    );
+
+    //locking  key register
+    shift_register #(
+        .WIDTH(16)
+    ) locking_key_shift_register (
+        .clk(clk),
+        .rst(rst),
+        .enable(), // Enable the btn_shift_register, always read the status of the button input
+        .data_in(),
+        .data_out(locking_key),
+        .scan_enable(scan_enable),
+        .scan_in(led_scan_out), // Connect the scan_in to the last memory cell scan_out
+        .scan_out(scan_out) // Connect the new wire to the scan_out
     );
 
     // Read operation
