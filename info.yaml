@@ -45,10 +45,12 @@ documentation:
 
       The correct key is provided to allow everyone to use this design: 1011 1111 1111 1001
       We store the key in a scan chained register. In order to have the design working, your assembly should end with this two lines:
+      
+      '''
       15: DATA 249    ; logic locking unlock key (program will not work without this)
       16: DATA 191    ; logic locking unlock key (program will not work without this)
-
-
+      '''
+      
 # Instructions on how someone could test your project, include things like what buttons do what and how to set the clock if needed
   how_to_test:  |
       The processor will not run unless a program is scanned into it.
