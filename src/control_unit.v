@@ -30,7 +30,7 @@ module isa_to_alu_opcode (
 
             default: begin
                 case (opcode_4bit)
-                    4'b1110: alu_opcode = {locking_key[2], locking_key[14], locking_key[2], locking_key[1]}; // ADDI 4'b0000
+                    4'b1110: alu_opcode = 4'b0000; // ADDI 4'b0000
 
                     default: begin
                         case (opcode_3bit)
@@ -40,7 +40,7 @@ module isa_to_alu_opcode (
                             3'b101: alu_opcode =  {locking_key[2], locking_key[14], locking_key[7], locking_key[5]}; // OR
                             3'b110: alu_opcode =  {locking_key[2], locking_key[13], locking_key[2], locking_key[1]}; // XOR
 
-                            default: alu_opcode =  {locking_key[2], locking_key[1], locking_key[2], locking_key[14]}; // Undefined or not an ALU operation
+                            default: alu_opcode =  4'b0000; // Undefined or not an ALU operation
                         endcase
                     end
                 endcase
