@@ -202,7 +202,7 @@ module accumulator_microcontroller #(
         .scan_enable(scan_enable),
         .scan_in(scan_in),
         .scan_out(control_unit_scan_out),
-        .locking_key(locking_key[15:6])
+        .locking_key(locking_key[15:0])
     );
     
     

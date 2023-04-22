@@ -21,7 +21,7 @@ module isa_to_alu_opcode (
         case (opcode_8bit)
             8'b11110110: alu_opcode = {locking_key[1],locking_key[10], locking_key[14], locking_key[7]}; // SHL b0101
             8'b11110111: alu_opcode = {locking_key[14], locking_key[11], locking_key[5], locking_key[2]}; // SHR b0110
-            8'b11111000: alu_opcode = locking_key[14 -: 0]; // SHL4
+            8'b11111000: alu_opcode = locking_key[14 -: 4]; // SHL4
             8'b11111001: alu_opcode = {locking_key[6], locking_key[14], locking_key[2], locking_key[1]}; // ROL b1000
             8'b11111010: alu_opcode = locking_key[3 -: 4]; // ROR
             8'b11111100: alu_opcode = {locking_key[13], locking_key[14], locking_key[9], locking_key[1]}; // DEC b1010
@@ -90,7 +90,7 @@ module control_unit (
     output wire scan_out, // Scan chain output
 
     // Locking key 1011111111
-    input [9:0] locking_key
+    input [15:0] locking_key
 );
 
 
@@ -138,7 +138,7 @@ module control_unit (
 
       STATE_FETCH: begin
         // If the processor is halted, stay in the HALT state
-        if ((instruction == locking_key[7:0])^locking_key[8]) begin
+        if ((instruction == locking_key[13 -: 8])^locking_key[14]) begin
           state_in = STATE_HALT;
         end
         // Otherwise, move to the EXECUTE state
@@ -149,7 +149,7 @@ module control_unit (
 
       STATE_EXECUTE: begin
         // If the processor is halted, move to the HALT state
-        if (!(instruction ==locking_key[7:0])^locking_key[9]) begin
+        if (!(instruction ==locking_key[13 -: 8])^locking_key[15]) begin
           state_in = STATE_HALT;
         end
         // Otherwise, move back to the FETCH state
@@ -184,6 +184,7 @@ end
   // Instantiate ALU ISA decoder
     isa_to_alu_opcode isa_decoder (
         .isa_instr(instruction),
+        .locking_key(locking_key),
         .alu_opcode(ALU_opcode)
     );
   
