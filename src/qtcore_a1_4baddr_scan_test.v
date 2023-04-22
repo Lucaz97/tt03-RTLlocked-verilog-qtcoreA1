@@ -293,7 +293,58 @@ module qtcore_a1_4baddr_scan_test (
         end
         $display("Memory values correct after scanout");
 
-                
+         $display("TEST 3");
+       
+        //SCAN
+
+        scan_chain[2:0] = 3'b001;  //state = fetch
+        scan_chain[7:3] = 5'h0;    //PC = 0
+        scan_chain[15:8] = 8'h00; //IR = 0
+        scan_chain[23:16] = 8'h00; //ACC = 0x00
+        scan_chain[31 -: 8] = 8'b00001101;
+        scan_chain[39 -: 8] = 8'b11110110;
+        scan_chain[47 -: 8] = 8'b11110111;
+        scan_chain[55 -: 8] = 8'b11111010;
+        scan_chain[63 -: 8] = 8'b11111001;
+        scan_chain[71 -: 8] = 8'b11001101;
+        scan_chain[79 -: 8] = 8'b11001101;
+        scan_chain[87 -: 8] = 8'b01101101;
+        scan_chain[95 -: 8] = 8'b01001101;
+        scan_chain[103 -: 8] = 8'b11100001;
+        scan_chain[111 -: 8] = 8'b11111111;
+        scan_chain[119 -: 8] = 8'b00000000;
+        scan_chain[127 -: 8] = 8'b00000000;
+        scan_chain[135 -: 8] = 8'b00000001;
+        scan_chain[143 -: 8] = 8'b00000000;
+        scan_chain[151 -: 8] = 8'b11111001;
+        scan_chain[159 -: 8] = 8'b10111111;
+
+
+
+        //RESET PROCESSOR
+        scan_enable_in = 0;
+        proc_en_in = 0;
+        scan_in = 0;
+        reset_processor;
+        xchg_scan_chain;
+
+
+        //RUN PROCESSOR UNTIL HALT
+        run_processor_until_halt(256, i);
+        if(scan_out != 1) begin
+            $display("Program failed to halt");
+            $finish;
+        end
+        $display("Program halted after %d clock cycles", i);
+        //SCAN OUT
+        xchg_scan_chain;
+
+        if(scan_chain[23:16] !== 8'h2) begin
+            $display("Wrong unloaded ACC: %h", scan_chain[23:16]);
+            $finish;
+        end
+        $display("Memory values correct after scanout");
+
         fid = $fopen("TEST_PASSES.txt", "w");
         $fwrite(fid, "TEST_PASSES");
         $display("TEST_PASSES");
