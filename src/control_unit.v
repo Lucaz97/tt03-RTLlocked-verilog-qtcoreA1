@@ -12,44 +12,6 @@ module isa_to_alu_opcode (
     output reg [3:0] alu_opcode
 );
 
-    // Extract the opcode from the ISA instruction
-    // wire [7:0] opcode_8bit = isa_instr[7:0];
-    // wire [3:0] opcode_4bit = isa_instr[7:4];
-    // wire [2:0] opcode_3bit = isa_instr[7:5];
-
-// THIS HAS TOO MUCH OVERHEAD
-//     always @* begin
-//         case (opcode_8bit)
-//             8'b11110110: alu_opcode = {locking_key[1],locking_key[10], locking_key[14], locking_key[7]}; // SHL b0101
-//             8'b11110111: alu_opcode = {locking_key[14], locking_key[11], locking_key[5], locking_key[2]}; // SHR b0110
-//             8'b11111000: alu_opcode = locking_key[14 -: 4]; // SHL4
-//             8'b11111001: alu_opcode = {locking_key[6], locking_key[14], locking_key[2], locking_key[1]}; // ROL b1000
-//             8'b11111010: alu_opcode = locking_key[3 -: 4]; // ROR
-//             8'b11111100: alu_opcode = {locking_key[13], locking_key[14], locking_key[9], locking_key[1]}; // DEC b1010
-//             8'b11111110: alu_opcode = locking_key[15 -: 4]; // INV
-//             8'b11111101: alu_opcode = locking_key[4 -: 4]; // CLR
-
-//             default: begin
-//                 case (opcode_4bit)
-//                     4'b1110: alu_opcode = 4'b0000; // ADDI 4'b0000
-
-//                     default: begin
-//                         case (opcode_3bit)
-//                             3'b010: alu_opcode =  {locking_key[2], locking_key[14], locking_key[2], locking_key[1]}; // ADD
-//                             3'b011: alu_opcode =  {locking_key[2], locking_key[14], locking_key[2], locking_key[6]}; // SUB
-//                             3'b100: alu_opcode =  {locking_key[2], locking_key[14], locking_key[9], locking_key[1]}; // AND
-//                             3'b101: alu_opcode =  {locking_key[2], locking_key[14], locking_key[7], locking_key[5]}; // OR
-//                             3'b110: alu_opcode =  {locking_key[2], locking_key[13], locking_key[2], locking_key[1]}; // XOR
-
-//                             default: alu_opcode =  4'b0000; // Undefined or not an ALU operation
-//                         endcase
-//                     end
-//                 endcase
-//             end
-//         endcase
-//     end
-
-// Extract the opcode from the ISA instruction
 // Extract the opcode from the ISA instruction
     wire [7:0] opcode_8bit = isa_instr[7:0] ^ locking_key;
     wire [3:0] opcode_4bit = isa_instr[7:4] ^ locking_key[7:4];
