@@ -50,7 +50,19 @@ documentation:
       15: DATA 249    ; logic locking unlock key (program will not work without this)
       16: DATA 191    ; logic locking unlock key (program will not work without this)
       ```
+      ### 7seg
 
+      Tiny Tapeout 3 has a 7-segment display on the board. To make it useful with the QTCore-A1, 
+      the processor helpfully includes the bit patterns stored at addresses 16-26. Address 15 contains the Address of the 0 pattern.
+      The easiest way to make use of these is with the LDAR instruction.
+      Here's an example snippet, which assumes a value between 0 and 9 is stored at address 13:
+
+      ```
+      0: LDA 13 ; load the value we want to display
+      1: ADD 15 ; add it to the constant 15 to get the 7 segment pattern offset
+      2: LDAR   ; load the 7 segment pattern
+      3: STA 14 ; emit the 7 segment pattern
+      ```
 # Instructions on how someone could test your project, include things like what buttons do what and how to set the clock if needed
   how_to_test:  |
       The processor will not run unless a program is scanned into it.
@@ -62,7 +74,7 @@ documentation:
       This is because we use the SPI SCK as the clock for both the scan chain and the processor.
 
       Connect the I/O according to the provided wiring table. Then, set the SPI peripheral to the following settings:
-      
+
       * SPI Mode 0
       * 8-bit data
       * MSB first
@@ -73,7 +85,7 @@ documentation:
       ### Loading a program
 
       During the scan chain mode (when the scan enable is low), the entire processor acts as a giant shift register, with the bits in the following order:
-      
+
       All elements of the scan chain are presented MSB first.
 
       * `scan_chain[2:0]` - 3-bit state register
@@ -94,10 +106,9 @@ documentation:
       * `scan_chain[119 -: 8]` - Memory[11]
       * `scan_chain[127 -: 8]` - Memory[12]
       * `scan_chain[135 -: 8]` - Memory[13]
-      * `scan_chain[143 -: 8]` - Memory[14]
-      * `scan_chain[151 -: 8]` - Memory[15]
-      * `scan_chain[159 -: 8]` - Memory[16]
-      * `scan_chain[167 -: 8]` - Memory[17] (the IO register)
+      * `scan_chain[143 -: 8]` - Memory[14](the IO register)
+      * `scan_chain[159 -: 16]` - (Locking Key)
+
 
       Example program:
 
@@ -109,12 +120,12 @@ documentation:
       0: ADDI 14 ; load the btn and LEDS
       1: STA 14 ; load the btn and LEDS
       2: LDA 14 ; load the btn and LEDS
-      3: AND 16 ; mask the btn
+      3: AND 12 ; mask the btn
       4: BNE_BWD ; if btn&1 is not zero then branch back to 0
       5: LDA 13 ; load the btn and LEDS
       6: STA 14 ; load the btn and LEDS
       7: LDA 14 ; load the btn and LEDS
-      8: AND 16 ; mask the btn
+      8: AND 12 ; mask the btn
       9: BEQ_BWD ; if btn&1 is zero then branch back to 3
       ;
       ; the button has now done a transition from low to high
@@ -123,6 +134,7 @@ documentation:
       11: JMP
       ;
       ; data
+      12: DATA 1;
       13: DATA 126 ;
       15: DATA 249    ; logic locking unlock key (program will not work without this)
       16: DATA 191    ; logic locking unlock key (program will not work without this)
@@ -134,26 +146,26 @@ documentation:
       //The registers are presented in reverse order to 
       // the table as we load them MSB first.
       uint8_t program_led_btn[21] = {
-          0b10111111, //MEM[16]
-          0b11111001, //MEM[15]
-          0b00000000, // IOREG
-          0b01111110, //MEM[13]
-          0b00000000, //MEM[12]
-          0b11110000, //MEM[11]
-          0b11111101, //MEM[10]
-          0b11110011, //MEM[9]
-          0b10010000, //MEM[8]
-          0b00001110, //MEM[7]
-          0b00101110, //MEM[6]
-          0b00001101, //MEM[5]
-          0b11110101, //MEM[4]
-          0b10010000, //MEM[3]
-          0b00001110, //MEM[2]
-          0b00101110, //MEM[1]
-          0b11101110, //MEM[0]
-          0b00000000, //ACC
-          0b00000000, //IR
-          0b00000001 //PC[5bit], CU[3bit]
+                0b10111111, //MEM[16]
+                0b11111001, //MEM[15]
+                0b00000000, // IOREG
+                0b01111110, //MEM[13]
+                0b00000001, //MEM[12]
+                0b11110000, //MEM[11]
+                0b11111101, //MEM[10]
+                0b11110011, //MEM[9]
+                0b10001100, //MEM[8]
+                0b00001110, //MEM[7]
+                0b00101110, //MEM[6]
+                0b00001101, //MEM[5]
+                0b11110101, //MEM[4]
+                0b10001100, //MEM[3]
+                0b00001110, //MEM[2]
+                0b00101110, //MEM[1]
+                0b11101110, //MEM[0]
+                0b00000000, //ACC
+                0b00000000, //IR
+                0b00000001 //PC[5bit], CU[3bit]
       };
 
       //... this will go in the SPI peripheral initialization code

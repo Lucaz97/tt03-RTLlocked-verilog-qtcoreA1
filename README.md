@@ -9,7 +9,8 @@
 The original QTCore-A1 from Hammond Pearce is a basic accumulator-based 8-bit microarchitecture (with an emphasis on the micro). It is a Von Neumann design (shared data and instruction memory).
 Its original specs can be found here: https://github.com/kiwih/tt03-verilog-qtcoreA1
 
-In order to lock the design, I had to make some space so I cut off 2 (8bit) memory registers (as a 16 bit register was added to store the locking key) and the memory mapped constants.
+In order to lock the design, I had to make some space so I cut off 2 (8bit) memory registers (as a 16 bit register was added to store the locking key) therefor the memory mapped constants are now shifted up by 2.
+
 I locked the ALU with 6 bits, locking 1 operation an 3 constants, and the control unit with 10 bits, locking an 8 bit constnt used twice and 2 branches. This locking techniques are the same one first presented in ASSURE: https://arxiv.org/abs/2010.05344
 
 I also locked the ISA to ALU opcodes module using a novel RTL locking technique to lock case statements. 
@@ -20,13 +21,88 @@ by describing the technique, the key value to use, and the original module. The 
 back and forth was required for it to get the right values for the case constants (apparently gpt4 struggles a bit with xor operations).
 
 The correct key is provided to allow everyone to use this design: 1011 1111 1111 1001
-We store the key in a scan chained register. In order to have the design working, your assembly should end with this two lines:
+We store the key in a scan chained register, this register is not memory mapped, so it appears in the scan chain table but not in the memory table. In order to have the design working, your assembly should end with this two lines:
 ```
 15: DATA 249    ; logic locking unlock key (program will not work without this)
 16: DATA 191    ; logic locking unlock key (program will not work without this)
 ```
 
+### Processor Memory Map
+
+| Address | Description |
+|---------|-------------|
+| 0-13    | 14 bytes of general purpose Instruction/Data memory |
+| 14      | I/O: {OUT[7:1], IN[0]} |
+| 15      | Constant value: 16 (See "7seg" note below) |
+| 16      | Constant value: Bits for 7seg "0" |
+| 17      | Constant value: Bits for 7seg "1" |
+| 18      | Constant value: Bits for 7seg "2" |
+| 19      | Constant value: Bits for 7seg "3" |
+| 21      | Constant value: Bits for 7seg "4" |
+| 22      | Constant value: Bits for 7seg "5" |
+| 23      | Constant value: Bits for 7seg "6" |
+| 24      | Constant value: Bits for 7seg "7" |
+| 25      | Constant value: Bits for 7seg "8" |
+| 26      | Constant value: Bits for 7seg "9" |
+| 27-31   | Constant value: 1 |
+
+### 7seg
+
+Tiny Tapeout 3 has a 7-segment display on the board. To make it useful with the QTCore-A1, 
+the processor helpfully includes the bit patterns stored at addresses 16-26. Address 15 contains the Address of the 0 pattern.
+The easiest way to make use of these is with the LDAR instruction.
+Here's an example snippet, which assumes a value between 0 and 9 is stored at address 13:
+
+```
+0: LDA 13 ; load the value we want to display
+1: ADD 15 ; add it to the constant 15 to get the 7 segment pattern offset
+2: LDAR   ; load the 7 segment pattern
+3: STA 14 ; emit the 7 segment pattern
+```
 ## How it works
+
+### Wiring the SPI
+
+The QTCore-A1 is designed to be connected to an SPI peripheral along with two chip selects.
+This is because we use the SPI SCK as the clock for both the scan chain and the processor.
+
+Connect the I/O according to the provided wiring table. Then, set the SPI peripheral to the following settings:
+
+* SPI Mode 0
+* 8-bit data
+* MSB first
+* A very slow clock (I used 1kHz)
+* The scan chain chip select is active low
+* The processor chip select is active low
+
+### Loading a program
+
+During the scan chain mode (when the scan enable is low), the entire processor acts as a giant shift register, with the bits in the following order:
+
+All elements of the scan chain are presented MSB first.
+
+* `scan_chain[2:0]` - 3-bit state register
+* `scan_chain[7:3]` - 5-bit PC
+* `scan_chain[15:8]` - 8-bit Instruction Register 
+* `scan_chain[23:16]` - 8-bit Accumulator 
+* `scan_chain[31 -: 8]` - Memory[0]
+* `scan_chain[39 -: 8]` - Memory[1]
+* `scan_chain[47 -: 8]` - Memory[2]
+* `scan_chain[55 -: 8]` - Memory[3]
+* `scan_chain[63 -: 8]` - Memory[4]
+* `scan_chain[71 -: 8]` - Memory[5]
+* `scan_chain[79 -: 8]` - Memory[6]
+* `scan_chain[87 -: 8]` - Memory[7]
+* `scan_chain[95 -: 8]` - Memory[8]
+* `scan_chain[103 -: 8]` - Memory[9]
+* `scan_chain[111 -: 8]` - Memory[10]
+* `scan_chain[119 -: 8]` - Memory[11]
+* `scan_chain[127 -: 8]` - Memory[12]
+* `scan_chain[135 -: 8]` - Memory[13]
+* `scan_chain[143 -: 8]` - Memory[14](the IO register)
+* `scan_chain[159 -: 16]` - (Locking Key)
+
+
 Example program:
 
 ```
@@ -37,12 +113,12 @@ Example program:
 0: ADDI 14 ; load the btn and LEDS
 1: STA 14 ; load the btn and LEDS
 2: LDA 14 ; load the btn and LEDS
-3: AND 16 ; mask the btn
+3: AND 12 ; mask the btn
 4: BNE_BWD ; if btn&1 is not zero then branch back to 0
 5: LDA 13 ; load the btn and LEDS
 6: STA 14 ; load the btn and LEDS
 7: LDA 14 ; load the btn and LEDS
-8: AND 16 ; mask the btn
+8: AND 12 ; mask the btn
 9: BEQ_BWD ; if btn&1 is zero then branch back to 3
 ;
 ; the button has now done a transition from low to high
@@ -51,6 +127,7 @@ Example program:
 11: JMP
 ;
 ; data
+12: DATA 1;
 13: DATA 126 ;
 15: DATA 249    ; logic locking unlock key (program will not work without this)
 16: DATA 191    ; logic locking unlock key (program will not work without this)
@@ -66,16 +143,16 @@ uint8_t program_led_btn[21] = {
           0b11111001, //MEM[15]
           0b00000000, // IOREG
           0b01111110, //MEM[13]
-          0b00000000, //MEM[12]
+          0b00000001, //MEM[12]
           0b11110000, //MEM[11]
           0b11111101, //MEM[10]
           0b11110011, //MEM[9]
-          0b10010000, //MEM[8]
+          0b10001100, //MEM[8]
           0b00001110, //MEM[7]
           0b00101110, //MEM[6]
           0b00001101, //MEM[5]
           0b11110101, //MEM[4]
-          0b10010000, //MEM[3]
+          0b10001100, //MEM[3]
           0b00001110, //MEM[2]
           0b00101110, //MEM[1]
           0b11101110, //MEM[0]
