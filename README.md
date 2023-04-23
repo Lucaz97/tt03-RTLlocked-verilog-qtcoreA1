@@ -26,6 +26,35 @@ We store the key in a scan chained register. In order to have the design working
 
 
 ## How it works
+Example program:
+
+'''
+; This program tests the btn and LEDs
+; will switch between 0 and 7 pressing the button
+;
+; BTNs and LEDS are at address 17, btn at LSB
+0: ADDI 7 ; load the btn and LEDS
+1: STA 17 ; load the btn and LEDS
+2: LDA 17 ; load the btn and LEDS
+3: AND 16 ; mask the btn
+4: BNE_BWD ; if btn&1 is not zero then branch back to 0
+5: LDA 13 ; load the btn and LEDS
+6: STA 17 ; load the btn and LEDS
+7: LDA 17 ; load the btn and LEDS
+8: AND 16 ; mask the btn
+9: BEQ_BWD ; if btn&1 is zero then branch back to 3
+;
+; the button has now done a transition from low to high
+;
+10: CLR
+11: JMP
+;
+; data
+13: DATA 127 ;
+15: DATA 249    ; logic locking unlock key (program will not work without this)
+16: DATA 191    ; logic locking unlock key (program will not work without this)
+'''
+
 
 C code to load the previously-discussed example program (e.g. via the STM32 HAL) is provided:
 ```
@@ -33,23 +62,23 @@ C code to load the previously-discussed example program (e.g. via the STM32 HAL)
 // the table as we load them MSB first.
 uint8_t program_led_btn[21] = {
     0b00000000, //IOREG
-    0b00000001, //MEM[16]
-    0b00011000, //MEM[15]
+    0b10111111, //MEM[16]
+    0b11111001, //MEM[15]
     0b00000000, //MEM[14]
-    0b11110000, //MEM[13]
-    0b11111101, //MEM[12]
-    0b00110001, //MEM[11]
-    0b11111011, //MEM[10]
-    0b11101110, //MEM[9]
-    0b00101110, //MEM[8]
-    0b11010000, //MEM[7]
-    0b00001110, //MEM[6]
-    0b11110011, //MEM[5]
-    0b10010000, //MEM[4]
-    0b00010001, //MEM[3]
-    0b11110101, //MEM[2]
-    0b10010000, //MEM[1]
-    0b00010001, //MEM[0]
+    0b01111111, //MEM[13]
+    0b00000000, //MEM[12]
+    0b11110000, //MEM[11]
+    0b11111101, //MEM[10]
+    0b11110011, //MEM[9]
+    0b10010000, //MEM[8]
+    0b00010001, //MEM[7]
+    0b00110001, //MEM[6]
+    0b00001101, //MEM[5]
+    0b11110101, //MEM[4]
+    0b10010000, //MEM[3]
+    0b00010001, //MEM[2]
+    0b00110001, //MEM[1]
+    0b11100111, //MEM[0]
     0b00000000, //ACC
     0b00000000, //IR
     0b00000001 //PC[5bit], CU[3bit]
