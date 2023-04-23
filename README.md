@@ -1,6 +1,6 @@
 ![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg)
 
-# QTcore-A1
+# RTL Locked QTcore-A1
 
 *Author*: Original microcontroller: Hammond Pearce; Locked version: Luca Collini
 
