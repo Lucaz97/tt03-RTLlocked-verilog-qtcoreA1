@@ -100,6 +100,11 @@ module memory_bank #(
             data_out = mem_data_out[address];
         end else case (address)
             IO_ADDR: data_out = {led_data_out, btn_data_out}; // Place btn_data_out at the LSB
+            IO_ADDR + 1: data_out = IO_ADDR + 2; // Return IO_ADDR + 2 for address IO_ADDR + 1
+            IO_ADDR + 2: data_out = {7'b0111111, 1'b0}; // 0
+            IO_ADDR + 3: data_out = {7'b0000110, 1'b0}; // 1
+            IO_ADDR + 4: data_out = {7'b1011011, 1'b0}; // 2
+            IO_ADDR + 5: data_out = {7'b1001111, 1'b0}; // 3
             default: data_out = 8'b00000001; // Return "00000001" for all other memory addresses outside the range
         endcase
     end
