@@ -7,7 +7,7 @@
 2: LDA 17 ; load the btn and LEDS
 3: AND 16 ; mask the btn
 4: BNE_BWD ; if btn&1 is not zero then branch back to 0
-5: ADDI 120 ; load the btn and LEDS
+5: LDA 13 ; load the btn and LEDS
 6: STA 17 ; load the btn and LEDS
 7: LDA 17 ; load the btn and LEDS
 8: AND 16 ; mask the btn
@@ -19,6 +19,6 @@
 11: JMP
 ;
 ; data
-;
+13: DATA 127 ;
 15: DATA 249    ; logic locking unlock key (program will not work without this)
 16: DATA 191    ; logic locking unlock key (program will not work without this)
