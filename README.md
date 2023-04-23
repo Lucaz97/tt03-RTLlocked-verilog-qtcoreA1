@@ -21,14 +21,15 @@ back and forth was required for it to get the right values for the case constant
 
 The correct key is provided to allow everyone to use this design: 1011 1111 1111 1001
 We store the key in a scan chained register. In order to have the design working, your assembly should end with this two lines:
+```
 15: DATA 249    ; logic locking unlock key (program will not work without this)
 16: DATA 191    ; logic locking unlock key (program will not work without this)
-
+```
 
 ## How it works
 Example program:
 
-'''
+```
 ; This program tests the btn and LEDs
 ; will switch between 0 and 7 pressing the button
 ;
@@ -53,7 +54,7 @@ Example program:
 13: DATA 127 ;
 15: DATA 249    ; logic locking unlock key (program will not work without this)
 16: DATA 191    ; logic locking unlock key (program will not work without this)
-'''
+```
 
 
 C code to load the previously-discussed example program (e.g. via the STM32 HAL) is provided:
