@@ -2,8 +2,8 @@
 //////////////////////////////////////////////////////////////////////////////////
 // Company: New York University
 // Engineer: ChatGPT GPT-4 Mar 23 version; Hammond Pearce (prompting + assembly)
-// 
-// Last Edited Date: 04/19/2023
+// Engineer: Luca Collini, locking  
+// Last Edited Date: 04/123/2023
 //////////////////////////////////////////////////////////////////////////////////
 //locking key: 1011 1111 1111 1001
 module isa_to_alu_opcode (
