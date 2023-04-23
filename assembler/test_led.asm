@@ -19,6 +19,6 @@
 11: JMP
 ;
 ; data
-13: DATA 254 ;
+13: DATA 126 ;
 15: DATA 249    ; logic locking unlock key (program will not work without this)
 16: DATA 191    ; logic locking unlock key (program will not work without this)

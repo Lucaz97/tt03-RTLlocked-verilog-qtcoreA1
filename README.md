@@ -51,7 +51,7 @@ Example program:
 11: JMP
 ;
 ; data
-13: DATA 254 ;
+13: DATA 126 ;
 15: DATA 249    ; logic locking unlock key (program will not work without this)
 16: DATA 191    ; logic locking unlock key (program will not work without this)
 ```
@@ -65,7 +65,7 @@ uint8_t program_led_btn[21] = {
           0b10111111, //MEM[16]
           0b11111001, //MEM[15]
           0b00000000, // IOREG
-          0b11111110, //MEM[13]
+          0b01111110, //MEM[13]
           0b00000000, //MEM[12]
           0b11110000, //MEM[11]
           0b11111101, //MEM[10]
