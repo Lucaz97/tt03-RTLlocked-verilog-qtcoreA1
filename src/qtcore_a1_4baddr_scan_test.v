@@ -521,22 +521,123 @@ module qtcore_a1_4baddr_scan_test (
         end
         run_processor_until_halt(18, i);
         if(led_out != 7'b1111100) begin //first output value: "6"
-            $display("LEDs wrong value");
+            $display("LEDs wrong value %d", led_out);
             $finish;
         end
         run_processor_until_halt(18, i);
         if(led_out != 7'b0000111) begin //first output value: "7"
-            $display("LEDs wrong value");
+            $display("LEDs wrong value %d", led_out);
             $finish;
         end
         run_processor_until_halt(18, i);
         if(led_out != 7'b1111111) begin //first output value: "8"
-            $display("LEDs wrong value");
+            $display("LEDs wrong value %d", led_out);
             $finish;
         end
         run_processor_until_halt(18, i);
         if(led_out != 7'b1100111) begin //first output value: "9"
-            $display("LEDs wrong value");
+            $display("LEDs wrong value %d", led_out);
+            $finish;
+        end
+
+        $display("7seg values correct ");
+
+         $display("TEST 5 led/btn ");
+
+        scan_chain[2:0] = 3'b001;  //state = fetch
+        scan_chain[7:3] = 5'h0;    //PC = 0
+        scan_chain[15:8] = 8'h00; //IR = 0
+        scan_chain[23:16] = 8'h00; //ACC = 0x00
+        scan_chain[31 -: 8] = 8'b11101110;
+        scan_chain[39 -: 8] = 8'b00101110;
+        scan_chain[47 -: 8] = 8'b00001110;
+        scan_chain[55 -: 8] = 8'b10001100;
+        scan_chain[63 -: 8] = 8'b11110101;
+        scan_chain[71 -: 8] = 8'b00001101;
+        scan_chain[79 -: 8] = 8'b00101110;
+        scan_chain[87 -: 8] = 8'b00001110;
+        scan_chain[95 -: 8] = 8'b10001100;
+        scan_chain[103 -: 8] = 8'b11110011;
+        scan_chain[111 -: 8] = 8'b11111101;
+        scan_chain[119 -: 8] = 8'b11110000;
+        scan_chain[127 -: 8] = 8'b00000001;
+        scan_chain[135 -: 8] = 8'b01111110;
+        scan_chain[143 -: 8] = 8'b00000000;
+        scan_chain[151 -: 8] = 8'b11111001;
+        scan_chain[159 -: 8] = 8'b10111111;
+
+
+        //RESET PROCESSOR
+        scan_enable_in = 0;
+        proc_en_in = 0;
+        scan_in = 0;
+        reset_processor;
+        //SCAN
+        xchg_scan_chain;
+
+
+        btn_in = 1;
+        run_processor_until_halt(4, i);
+        if(led_out != 7'b0000111) begin //first output value: "7"
+            $display("1LEDs wrong value %d", led_out);
+            $finish;
+        end
+
+        run_processor_until_halt(8, i);
+        if(led_out != 7'b0000111) begin //first output value: "7"
+            $display("2LEDs wrong value %d", led_out);
+            $finish;
+        end
+
+
+        run_processor_until_halt(8, i);
+        if(led_out != 7'b0000111) begin //first output value: "7"
+            $display("3LEDs wrong value %d", led_out);
+            $finish;
+        end
+        btn_in = 0;
+        run_processor_until_halt(100, i);
+        if(led_out != 7'b0111111) begin //first output value: "0"
+            $display("4LEDs wrong value 0: %b", led_out);
+            $finish;
+        end
+
+        run_processor_until_halt(6, i);
+        if(led_out != 7'b0111111) begin //first output value: "0"
+            $display("5LEDs wrong value 0: %b", led_out);
+            $finish;
+        end
+
+
+        btn_in = 1;
+        run_processor_until_halt(32, i);
+        if(led_out != 7'b0000111) begin //first output value: "7"
+            $display("6LEDs wrong value %d", led_out);
+            $finish;
+        end
+
+        run_processor_until_halt(4, i);
+        if(led_out != 7'b0000111) begin //first output value: "7"
+            $display("7LEDs wrong value %d", led_out);
+            $finish;
+        end
+
+
+        run_processor_until_halt(4, i);
+        if(led_out != 7'b0000111) begin //first output value: "7"
+            $display("8LEDs wrong value %d", led_out);
+            $finish;
+        end
+        btn_in = 0;
+        run_processor_until_halt(16, i);
+        if(led_out != 7'b0111111) begin //first output value: "0"
+            $display("9LEDs wrong value 0: %b", led_out);
+            $finish;
+        end
+
+        run_processor_until_halt(6, i);
+        if(led_out != 7'b0111111) begin //first output value: "0"
+            $display("10LEDs wrong value 0: %b", led_out);
             $finish;
         end
 

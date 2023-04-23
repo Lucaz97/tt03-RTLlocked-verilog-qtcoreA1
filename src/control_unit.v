@@ -26,7 +26,7 @@ module isa_to_alu_opcode (
             8'b01000011: alu_opcode = 4'b1001; // ROR
             8'b01000101: alu_opcode = 4'b1010; // DEC
             8'b01000111: alu_opcode = 4'b1011; // INV
-            8'b01000110: alu_opcode = 4'b1100; // CLR
+            8'b01000100: alu_opcode = 4'b1100; // CLR
 
             default: begin
                 case (opcode_4bit)
@@ -36,7 +36,7 @@ module isa_to_alu_opcode (
                         case (opcode_3bit)
                             3'b111: alu_opcode = 4'b0000; // ADD
                             3'b110: alu_opcode = 4'b0001; // SUB
-                            3'b011: alu_opcode = 4'b0010; // AND
+                            3'b001: alu_opcode = 4'b0010; // AND
                             3'b000: alu_opcode = 4'b0011; // OR
                             3'b011: alu_opcode = 4'b0100; // XOR
 
