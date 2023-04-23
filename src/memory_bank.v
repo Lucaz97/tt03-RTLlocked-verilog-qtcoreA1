@@ -105,6 +105,10 @@ module memory_bank #(
             IO_ADDR + 3: data_out = {7'b0000110, 1'b0}; // 1
             IO_ADDR + 4: data_out = {7'b1011011, 1'b0}; // 2
             IO_ADDR + 5: data_out = {7'b1001111, 1'b0}; // 3
+            IO_ADDR + 6: data_out = {7'b1100110, 1'b0}; // 4
+            IO_ADDR + 7: data_out = {7'b1101101, 1'b0}; // 5
+            IO_ADDR + 8: data_out = {7'b1111100, 1'b0}; // 6
+            IO_ADDR + 9: data_out = {7'b0000111, 1'b0}; // 7
             default: data_out = 8'b00000001; // Return "00000001" for all other memory addresses outside the range
         endcase
     end
