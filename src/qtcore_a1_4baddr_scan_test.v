@@ -15,7 +15,7 @@ module qtcore_a1_4baddr_scan_test (
  localparam CLK_PERIOD = 50;
     localparam CLK_HPERIOD = CLK_PERIOD/2;
 
-    localparam FULL_MEM_SIZE = 16; //includes the IO register
+    localparam FULL_MEM_SIZE = 15; //includes the IO register
     localparam SCAN_CHAIN_SIZE = 24 + (FULL_MEM_SIZE * 8) + 16;
     wire [7:0] io_in;
     wire [7:0] io_out;
@@ -177,7 +177,7 @@ module qtcore_a1_4baddr_scan_test (
     
         $display("Scan load successful");
         
-        /*//TEST PART 2: RUN PROCESSOR
+        //TEST PART 2: RUN PROCESSOR
         
         run_processor_until_halt(8, i); //two cycles per instruction, this should execute 4 instr
 
@@ -457,7 +457,7 @@ module qtcore_a1_4baddr_scan_test (
             $finish;
         end
         $display("Memory values corrupted with wrong key1");
-        */
+
 
         fid = $fopen("TEST_PASSES.txt", "w");
         $fwrite(fid, "TEST_PASSES");
